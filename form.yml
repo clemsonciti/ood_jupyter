@@ -95,7 +95,7 @@ attributes:
     widget: "select"
     value: "none"
     options:
-      - ["None","none"]
+      - ["None","any"]
       - ["Any", "any"]
       - ["K20","k20"]
       - ["K40","k40"]
