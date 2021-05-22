@@ -1,0 +1,157 @@
+# Batch Connect app configuration file
+#
+# @note Used to define the submitted cluster, title, description, and
+#   hard-coded/user-defined attributes that make up this Batch Connect app.
+---
+
+# **MUST** set cluster id here that matches cluster configuration file located
+# under /etc/ood/config/clusters.d/*.yml
+# @example Use the Owens cluster at Ohio Supercomputer Center
+#     cluster: "owens"
+cluster: "palmetto"
+
+# Define attribute values that aren't meant to be modified by the user within
+# the Dashboard form
+attributes:
+  # Set the corresponding modules that need to be loaded for Jupyter to run
+  #
+  # @note It is called within the batch job as `module load <modules>` if
+  #   defined
+  # @example Do not load any modules
+  #     modules: ""
+  # @example Using default python module
+  #     modules: "python"
+  # @example Using specific python module
+  #     modules: "python/3.5"
+  # @example Using combination of modules
+  #     modules: "python/3.5 cuda/8.0.44"
+  modules: "anaconda3/2019.10-gcc/8.3.1"
+
+  # Any extra command line arguments to feed to the `jupyter notebook ...`
+  # command that launches the Jupyter notebook within the batch job
+  extra_jupyter_args: ""
+  
+  # Palmetto PBS specific options
+  pbs_select:
+    label: "Number of resource chunks (select)"
+    widget: "select"
+    value: "1"
+    options:
+      - ["1","1"]
+      - ["2","2"]
+      - ["4","4"]
+      - ["8","8"]
+      
+  pbs_ncpus:
+    label: "CPU cores per chunk (ncpus)"
+    widget: "select"
+    value: "1"
+    options:
+      - ["1","1"]
+      - ["2","2"]
+      - ["4","4"]
+      - ["8","8"]
+      - ["16","16"]
+      - ["20","20"]
+      - ["24","24"]
+      - ["28","28"]
+      - ["32 (bigmem queue only)","32"]
+      - ["40","40"]
+      - ["64 (bigmem queue only)","64"]
+      - ["80 (bigmem queue only)","80"]
+      
+  pbs_mem:
+    label: "Amount of memory per chunk (mem)"
+    widget: "select"
+    value: "1gb"
+    options:
+      - ["1gb","1gb"]
+      - ["2gb","2gb"]
+      - ["4gb","4gb"]
+      - ["6gb","6gb"]
+      - ["14gb","14gb"]
+      - ["30gb","30gb"]
+      - ["62gb","62gb"]
+      - ["120gb","120gb"]
+      - ["370gb","370gb"]
+      - ["505gb (bigmem queue only)","505gb"]
+      - ["750gb (bigmem queue only)","750gb"]
+      - ["1000gb (bigmem queue only)","1000gb"]      
+      - ["1500gb (bigmem queue only)","1500gb"]
+      - ["2000gb (bigmem queue only)","2000gb"]
+
+  pbs_ngpus:
+    label: "Number of GPUs per chunk (ngpus)"
+    widget: "select"
+    value: "0"
+    options:
+      - ["None","0"]
+      - ["1","1"]
+      - ["2","2"]
+      - ["4","4"]
+
+  pbs_gpu_model:
+    label: "GPU Model (gpu_model)"
+    widget: "select"
+    value: "none"
+    options:
+      - ["None","none"]
+      - ["Any", "any"]
+      - ["K20","k20"]
+      - ["K40","k40"]
+      - ["P100","p100"]
+      - ["V100","v100"]
+      - ["V100 with NVLink","v100nv"]
+
+  pbs_interconnect:
+    label: "interconnect"
+    widget: "select"
+    value: "any"
+    options:
+      - ["any","any"]
+      - ["1g - Ethernet older phases 1-6","1g"]
+      - ["1ge - Ethernet phase 0 (bigmem queue","1ge"]
+      - ["10g - Ethernet phase 7-19 and phase 0 (bigmem queue)","10ge"]
+      - ["25g - Ethernet phase 7-19","25ge"]
+      - ["56g - Ethernet phase 7-19","56g"]
+      - ["100g - Ethernet phase 18 and above","100g"]
+
+  pbs_walltime:
+    label: "walltime"
+    widget: "select"
+    value: "00:30:00"
+    options:
+      - ["30 minutes","00:30:00"]
+      - ["1 hours","01:00:00"]
+      - ["2 hours","02:00:00"]
+      - ["4 hours","04:00:00"]
+      - ["16 hours","16:00:00"]
+      - ["24 hours","24:00:00"]
+      - ["72 hours","72:00:00"]
+      
+  pbs_queue:
+    label: "queue"
+    required: true
+    value: "work1"
+    
+# All of the attributes that make up the Dashboard form (in respective order),
+# and made available to the submit configuration file and the template ERB
+# files
+#
+# @note You typically do not need to modify this unless you want to add a new
+#   configurable value
+# @note If an attribute listed below is hard-coded above in the `attributes`
+#   option, then it will not appear in the form page that the user sees in the
+#   Dashboard
+form:
+  - modules
+  - extra_jupyter_args
+  - pbs_select
+  - pbs_ncpus
+  - pbs_mem
+  - pbs_ngpus
+  - pbs_gpu_model
+  - pbs_interconnect
+  - pbs_walltime
+  - pbs_queue
+  - bc_email_on_started
