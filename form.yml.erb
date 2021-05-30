@@ -1,13 +1,24 @@
-# Batch Connect app configuration file
-#
-# @note Used to define the submitted cluster, title, description, and
-#   hard-coded/user-defined attributes that make up this Batch Connect app.
+<%-
+  # get _list_partitions
+  p_cmd = "/opt/pbs/default/bin/qstat -Q | grep Rou | grep -v -E 'gpu|c1|c2|osg' | awk '{print $1}' | sort"
+  begin
+    output, status = Open3.capture2e(p_cmd)
+    if status.success?
+      _list_partitions = output.split("\n").map(&:strip).reject(&:blank?).sort
+    else
+      raise output
+    end
+  rescue => e
+    _list_partitions = []
+    p_error = e.message.strip
+  end
+
+-%>
 ---
 
 # **MUST** set cluster id here that matches cluster configuration file located
 # under /etc/ood/config/clusters.d/*.yml
-# @example Use the Owens cluster at Ohio Supercomputer Center
-#     cluster: "owens"
+
 cluster: "palmetto"
 
 # Define attribute values that aren't meant to be modified by the user within
@@ -95,7 +106,7 @@ attributes:
     widget: "select"
     value: "none"
     options:
-      - ["None","any"]
+      - ["None","none"]
       - ["Any", "any"]
       - ["K20","k20"]
       - ["K40","k40"]
@@ -104,7 +115,7 @@ attributes:
       - ["V100 with NVLink","v100nv"]
 
   pbs_interconnect:
-    label: "interconnect"
+    label: "Interconnect"
     widget: "select"
     value: "any"
     options:
@@ -117,7 +128,7 @@ attributes:
       - ["100g - Ethernet phase 18 and above","100g"]
 
   pbs_walltime:
-    label: "walltime"
+    label: "Walltime"
     widget: "select"
     value: "00:30:00"
     options:
@@ -130,9 +141,26 @@ attributes:
       - ["72 hours","72:00:00"]
       
   pbs_queue:
-    label: "queue"
+    label: "Queue"
     required: true
     value: "work1"
+    help: |
+      <small>Queue to submit the job to</small>
+    <%- if p_error -%>
+      <span class="text-danger">Error when parsing queues:</span>
+      ```
+      <%= p_error.gsub("\n", "\n      ") %>
+      ```
+    <%- end -%>
+    <%- if _list_partitions.blank? -%>
+    widget: text_field
+    <%- else -%>
+    widget: select
+    options:
+      <%- _list_partitions.each do |q| -%>
+      - [ "<%= q %>", "<%= q %>" ]
+      <%- end -%>
+    <%- end -%>
     
 # All of the attributes that make up the Dashboard form (in respective order),
 # and made available to the submit configuration file and the template ERB
