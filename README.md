@@ -1,4 +1,4 @@
-# Batch Connect - Example Jupyter Notebook Server
+# Batch Connect - Example Jupyter Notebook Server Palmetto
 
 ![GitHub Release](https://img.shields.io/github/release/osc/bc_example_jupyter.svg)
 ![GitHub License](https://img.shields.io/github/license/osc/bc_example_jupyter.svg)
