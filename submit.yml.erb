@@ -29,7 +29,7 @@ batch_connect:
 #  accounting_id: "account1"
 #  email_on_started: true
 #  native: # ... array of command line arguments ...
-#    - "select=<%= pbs_select %>:ncpus=<%= pbs_ncpus %>:mpiprocs=<%= pbs_ncpus %>:mem=<%= pbs_mem %>:interconnect=<%= pbs_interconnect %>:ngpus=<%= pbs_ngpus %>:gpu_model=<%= pbs_gpu_model %><%= pbs_extras %>,walltime=<%= pbs_walltime %>"
+#    
 
 script:
   native:
@@ -38,4 +38,4 @@ script:
     - "-q"
     - "<%= pbs_queue %>"
     - "-l"
-    - "<%= pbs_params %>"
+    - "select=<%= pbs_select %>:ncpus=<%= pbs_ncpus %>:mpiprocs=<%= pbs_ncpus %>:mem=<%= pbs_mem %><%= pbs_interconnect %><%= pbs_ngpus %><%= pbs_gpu_model %><%= pbs_extras %>,walltime=<%= pbs_walltime %>"

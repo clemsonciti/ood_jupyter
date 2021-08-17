@@ -21,132 +21,88 @@
 
 cluster: "palmetto"
 
-# Define attribute values that aren't meant to be modified by the user within
-# the Dashboard form
 attributes:
-  # Set the corresponding modules that need to be loaded for Jupyter to run
-  #
-  # @note It is called within the batch job as `module load <modules>` if
-  #   defined
-  # @example Do not load any modules
-  #     modules: ""
-  # @example Using default python module
-  #     modules: "python"
-  # @example Using specific python module
-  #     modules: "python/3.5"
-  # @example Using combination of modules
-  #     modules: "python/3.5 cuda/8.0.44"
   modules: "anaconda3/2019.10-gcc/8.3.1"
 
-  # Any extra command line arguments to feed to the `jupyter notebook ...`
-  # command that launches the Jupyter notebook within the batch job
   extra_jupyter_args: ""
   
   # Palmetto PBS specific options
- 
-  # pbs_select:
-  #  label: "Number of resource chunks (select)"
-  #  widget: "select"
-  #  value: "1"
-  #  options:
-  #    - ["1","1"]
-  #    - ["2","2"]
-  #    - ["4","4"]
-  #    - ["8","8"]
+  pbs_select:
+    label: "Number of resource chunks (select)"
+    value: "1"
       
-  # pbs_ncpus:
-  #  label: "CPU cores per chunk (ncpus)"
-  #  widget: "select"
-  #  value: "1"
-  #  options:
-  #    - ["1","1"]
-  #    - ["2","2"]
-  #    - ["4","4"]
-  #    - ["8","8"]
-  #    - ["16","16"]
-  #    - ["20","20"]
-  #    - ["24","24"]
-  #    - ["28","28"]
-  #    - ["32 (bigmem queue only)","32"]
-  #    - ["40","40"]
-  #    - ["64 (bigmem queue only)","64"]
-  #    - ["80 (bigmem queue only)","80"]
-      
-  # pbs_mem:
-  #  label: "Amount of memory per chunk (mem)"
-  #  widget: "select"
-  #  value: "1gb"
-  #  options:
-  #    - ["1gb","1gb"]
-  #    - ["2gb","2gb"]
-  #    - ["4gb","4gb"]
-  #    - ["6gb","6gb"]
-  #    - ["14gb","14gb"]
-  #    - ["30gb","30gb"]
-  #    - ["62gb","62gb"]
-  #    - ["120gb","120gb"]
-  #    - ["370gb","370gb"]
-  #    - ["505gb (bigmem queue only)","505gb"]
-  #    - ["750gb (bigmem queue only)","750gb"]
-  #    - ["1000gb (bigmem queue only)","1000gb"]      
-  #    - ["1500gb (bigmem queue only)","1500gb"]
-  #    - ["2000gb (bigmem queue only)","2000gb"]
-
-  # pbs_ngpus:
-  #  label: "Number of GPUs per chunk (ngpus)"
-  #  widget: "select"
-  #  value: "0"
-  #  options:
-  #    - ["None","0"]
-  #    - ["1","1"]
-  #    - ["2","2"]
-  #    - ["4","4"]
-
-  # pbs_gpu_model:
-#    label: "GPU Model (gpu_model)"
-#    widget: "select"
-#    value: "any"
-#    options:
-#      - ["None","any"]
-#      - ["Any", "any"]
-#      - ["K20","k20"]
-#      - ["K40","k40"]
-#      - ["P100","p100"]
-#      - ["V100","v100"]
-#      - ["V100 with NVLink","v100nv"]
-
-#  pbs_interconnect:
-#    label: "Interconnect"
-#    widget: "select"
-#    value: "any"
-#    options:
-#      - ["Any","any"]
-#      - ["1g - Ethernet older phases 1-6","1g"]
-#      - ["1ge - Ethernet phase 0 (bigmem queue","1ge"]
-#      - ["10g - Ethernet phase 7-19 and phase 0 (bigmem queue)","10ge"]
-#      - ["25g - Ethernet phase 7-19","25ge"]
-#      - ["56g - Ethernet phase 7-19","56g"]
-#      - ["100g - Ethernet phase 18 and above","100g"]
-
-  pbs_params:
-    label: "PBS resource allocation request"
-    value: "select=1:ncpus=1:mem=1g,walltime=00:30:00"
+  pbs_ncpus:
+    label: "CPU cores per chunk (ncpus)"
+    value: "1"
     help: |
-      <small>Enter the PBS parameters just like how you would in a command line environment. For example, <br>
-      <b>select=1:ncpus=4:mem=15gb:ngpus=1:gpu_model=k40:interconnect=fdr,walltime=02:00:00</b></small>
+      <small> - Typical Palmetto compute nodes have <b>8, 12, 16, 20, 24, 28, 40, and 56</b> cores.<br>
+      - DGX nodes have <b>128</b> cores.<br>
+      - Bigmem nodes have <b>24, 32, 40, and 80</b> cores.
+      - <b>Users can request any number of cores that is smaller than the number of available cores.</b>
+      </small>
+      
+  pbs_mem:
+    label: "Amount of memory per chunk (mem)"
+    value: "1gb"
+    help: |
+      <small> - Typical Palmetto compute nodes have <b>15, 30, 46, 62, 125, 372, 748, and 990</b> gb of memory.<br>
+      - DGX nodes have <b>990</b> gb of memory.<br>
+      - Bigmem nodes have <b>500 and 750</b> gb and <b>1 and 1.5</b> tb of memory.
+      </small>
 
-#  pbs_walltime:
-#    label: "Walltime"
-#    widget: "select"
-#    value: "00:30:00"
-#    options:
-#      - ["30 minutes","00:30:00"]
-#      - ["1 hours","01:00:00"]
-#      - ["2 hours","02:00:00"]
-#      - ["4 hours","04:00:00"]
-#      - ["16 hours","16:00:00"]
-#      - ["24 hours","24:00:00"]
-#      - ["72 hours","72:00:00"]
+  pbs_ngpus:
+    label: "Number of GPUs per chunk (ngpus)"
+    widget: "select"
+    value: "0"
+    options:
+      - ["None",""]
+      - ["1",":ngpus=1"]
+      - ["2",":ngpus=2"]
+      - ["4",":ngpus=4"]
+
+  pbs_gpu_model:
+    label: "GPU Model (gpu_model)"
+    widget: "select"
+    value: "none"
+    options:
+      - ["None",""]
+      - ["Any", ":gpu_model=any"]
+      - ["K20",":gpu_model=k20"]
+      - ["K40",":gpu_model=k40"]
+      - ["P100",":gpu_model=p100"]
+      - ["V100",":gpu_model=v100"]
+      - ["V100 with NVLink",":gpu_model=v100nv"]
+
+  pbs_interconnect:
+    label: "Interconnect"
+    widget: "select"
+    value: "any"
+    options:
+      - ["any",""]
+      - ["1g - Ethernet older phases 1-6",":interconnect=1g"]
+      - ["10g - Ethernet phase 7-18 and phase 0 (bigmem queue)","interconnect=10ge"]
+      - ["25g - Ethernet phase 18b-27",":interconnect=25ge"]
+      - ["56g - Ethernet phase 7-17",":interconnect=56g"]
+      - ["fdr - Infiniband phase 7-17",":interconnect=fdr"]
+      - ["hdr - Infiniband phase 18 and above",":interconnect=hdr"]
+      - ["100g - Ethernet phase 18 and above",":interconnect=100g"]
+
+  pbs_walltime:
+    label: "Walltime"
+    value: "00:30:00"
+    help: |
+      <small> - Walltime format is <b>hh:mm:ss</b>.<br>
+      - Phase 1 through 6 nodes can be reserved up to 336 hours.<br> 
+      - Phase 7 through 27 nodes can be reserved up to 72 hours. 
+      </small>
+      
+  pbs_extras:
+    label: "Extra PBS resource allocation request"
+    value: ""
+    help: |
+      <small>- Enter the additional resource request just like how you would in a command line environment.<br>
+      - Each request should start with a colon <b>:</b> sign. <br>
+      - For example: <b>:chip_type=e5-2665</b></small>
       
   pbs_queue:
     label: "Queue"
@@ -170,25 +126,16 @@ attributes:
       <%- end -%>
     <%- end -%>
     
-# All of the attributes that make up the Dashboard form (in respective order),
-# and made available to the submit configuration file and the template ERB
-# files
-#
-# @note You typically do not need to modify this unless you want to add a new
-#   configurable value
-# @note If an attribute listed below is hard-coded above in the `attributes`
-#   option, then it will not appear in the form page that the user sees in the
-#   Dashboard
 form:
   - modules
   - extra_jupyter_args
-#  - pbs_select
-#  - pbs_ncpus
-#  - pbs_mem
-#  - pbs_ngpus
-#  - pbs_gpu_model
-#  - pbs_interconnect
-  - pbs_params
-#  - pbs_walltime
+  - pbs_select
+  - pbs_ncpus
+  - pbs_mem
+  - pbs_ngpus
+  - pbs_gpu_model
+  - pbs_interconnect
+  - pbs_extras
+  - pbs_walltime
   - pbs_queue
   - bc_email_on_started
