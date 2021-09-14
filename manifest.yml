@@ -4,4 +4,5 @@ category: Interactive Apps
 subcategory: Servers
 role: batch_connect
 description: |
-  This app will launch a Jupyter Notebook server on one or more nodes with more advanced PBS resource request options.
+  This app will launch a Jupyter Notebook server on one or more nodes with more advanced PBS resource request options. 
+  Users can also specify virtual/conda environments to launch custom notebooks for Tensorflow and other advanced libraries. 
