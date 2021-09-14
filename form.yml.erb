@@ -22,10 +22,7 @@
 cluster: "palmetto"
 
 attributes:
-  modules: "anaconda3/2019.10-gcc/8.3.1"
 
-  extra_jupyter_args: ""
-  
   # Palmetto PBS specific options
   pbs_select:
     label: "Number of resource chunks (select)"
@@ -125,10 +122,42 @@ attributes:
       - [ "<%= q %>", "<%= q %>" ]
       <%- end -%>
     <%- end -%>
-    
+
+  modules: 
+    label: "Anaconda Version"
+    widget: "select"
+    required: true
+    value: "anaconda3/2019.10-gcc/8.3.1"
+    options:
+      - ["anaconda3/2019.10-gcc/8.3.1","anaconda3/2019.10-gcc/8.3.1"]
+      - ["anaconda3/2020.07-gcc/8.3.1","anaconda3/2020.07-gcc/8.3.1"]
+      - ["anaconda3/2021.05-gcc/8.3.1","anaconda3/2021.05-gcc/8.3.1"]
+
+  pbs_modules:
+    label: "List of modules to be loaded, separate by an empty space"
+    value: ""
+    help: |
+      <small> Provide a space-separated list of modules to be loaded. <br>
+      - For example: <b>openjdk/11.0.2-gcc/8.3.1 jags/4.3.0-gcc/8.3.1</b>
+      </small>
+
+  pbs_venv:
+    label: "Path to Python virtual/conda environment"
+    value: ""
+    help: |
+      <small> Provide an activation command to load the corresponding Python <br>
+      virtual (venv) or conda environment. You can replace NAME_OF_ENVIRONMENT <br>
+      with a corresponding conda environment, or PATH_TO_VIRTUAL_ENVIRONMENT <br>
+      with a specific path to your venv environment directory. <br>
+      - Example conda: <b>conda activate NAME_OF_ENVIRONMENT</b> <br>
+      - Example venv: <b>source PATH_TO_VIRTUAL_ENVIRONMENT/bin/activate</b> <br>
+      </small>
+      
+      
 form:
   - modules
-  - extra_jupyter_args
+  - pbs_modules
+  - pbs_venv
   - pbs_select
   - pbs_ncpus
   - pbs_mem

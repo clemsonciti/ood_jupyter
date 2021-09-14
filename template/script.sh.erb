@@ -15,16 +15,20 @@ cd "${HOME}"
 module purge
 
 # Load the require modules
-module load <%= context.modules %>
+module load <%= context.modules %> <%= context.pbs_modules %>
 
+set -x
 # List loaded modules
 module list
 <%- end -%>
+
+# Load the environment (if specified)
+<%= context.pbs_venv %>
 
 # Benchmark info
 echo "TIMING - Starting jupyter at: $(date)"
 
 # Launch the Jupyter Notebook Server
 set -x
-#jupyter notebook --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
-jupyter lab --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
+#jupyter notebook --config="${CONFIG_FILE}" 
+jupyter lab --config="${CONFIG_FILE}" 
