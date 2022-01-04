@@ -42,9 +42,9 @@ attributes:
     label: "Amount of memory per chunk (mem)"
     value: "1gb"
     help: |
-      <small> - Typical Palmetto compute nodes have <b>15, 30, 46, 62, 125, 372, 748, and 990</b> gb of memory.<br>
-      - DGX nodes have <b>990</b> gb of memory.<br>
-      - Bigmem nodes have <b>500 and 750</b> gb and <b>1 and 1.5</b> tb of memory.
+      <small> - Typical Palmetto compute nodes have <b>15gb, 30gb, 46gb, 62gb, 125gb, 372gb, 748gb, and 990gb</b> of memory.<br>
+      - DGX nodes have <b>990gb</b> of memory.<br>
+      - Bigmem nodes have <b>500gb and 750gb</b> and <b>1tb and 1.5tb</b> of memory.
       </small>
 
   pbs_ngpus:
@@ -77,7 +77,7 @@ attributes:
     options:
       - ["any",""]
       - ["1g - Ethernet older phases 1-6",":interconnect=1g"]
-      - ["10g - Ethernet phase 7-18 and phase 0 (bigmem queue)","interconnect=10ge"]
+      - ["10g - Ethernet phase 7-18 and phase 0 (bigmem queue)",":interconnect=10ge"]
       - ["25g - Ethernet phase 18b-27",":interconnect=25ge"]
       - ["56g - Ethernet phase 7-17",":interconnect=56g"]
       - ["fdr - Infiniband phase 7-17",":interconnect=fdr"]
