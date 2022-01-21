@@ -32,6 +32,5 @@ echo "TIMING - Starting jupyter at: $(date)"
 set -x
 #jupyter notebook --config="${CONFIG_FILE}"
 
-export JUPYTER_CONFIG_DIR="${PWD}"
 
 jupyter lab --config="${CONFIG_FILE}" --no-browser
