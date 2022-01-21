@@ -1,6 +1,23 @@
-<form action="/node/<%= host %>/<%= port %>/login" method="post" target="_blank">
+<%-
+  # generate form id, based on host and port
+  form_tb = Digest::SHA1.hexdigest("--" + host.to_s + "--" + app_port.to_s + "--")
+  form_tf = Digest::SHA1.hexdigest("--" + host.to_s + "--" + port.to_s + "--")
+-%>
+
+
+<div style="display:inline-block; width:45%;text-align:center;">
+
+<form id="<%= form_tb %>" action="/rnode/<%= host %>/<%= app_port %>/" method="post" target="_blank">
+  <button class="btn btn-primary" type="submit">
+    <i class="fa fa-eye"></i> Connect to Tensorboard
+  </button>
+</form>
+
+<form id="<%= form_tf %>" action="/node/<%= host %>/<%= port %>/login" method="post" target="_blank">
   <input type="hidden" name="password" value="<%= password %>">
   <button class="btn btn-primary" type="submit">
     <i class="fa fa-eye"></i> Connect to Jupyter
   </button>
 </form>
+
+</div>
