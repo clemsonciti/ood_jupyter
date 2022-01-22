@@ -130,7 +130,7 @@ attributes:
     value: "anaconda3/2019.10-gcc/8.3.1"
     options:
       - ["anaconda3/2019.10-gcc/8.3.1","anaconda3/2019.10-gcc/8.3.1"]
-      - ["anaconda3/2020.07-gcc/8.3.1","anaconda3/2020.07-gcc/8.3.1"]
+      - ["anaconda3/2020.07-gcc/8.4.1","anaconda3/2020.07-gcc/8.4.1"]
       - ["anaconda3/2021.05-gcc/8.3.1","anaconda3/2021.05-gcc/8.3.1"]
 
   pbs_modules:
@@ -152,12 +152,22 @@ attributes:
       - Example conda: <b>conda activate NAME_OF_ENVIRONMENT</b> <br>
       - Example venv: <b>source PATH_TO_VIRTUAL_ENVIRONMENT/bin/activate</b> <br>
       </small>
-      
+
+  workflow: 
+    label: "Notebook Workflow"
+    widget: "select"
+    required: true
+    value: "standard"
+    options:
+      - ["Standard Jupyter Notebook","standard"]
+      - ["Tensorflow Notebook","tensorflow"]
+      - ["Spark Notebook","spark"]      
       
 form:
   - modules
   - pbs_modules
   - pbs_venv
+  - workflow
   - pbs_select
   - pbs_ncpus
   - pbs_mem

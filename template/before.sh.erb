@@ -39,6 +39,13 @@ EOL
 
 ### This is to setup Tensorboard WebProxyServer
 
+show_tb="hidden"
+if [ <%= context.workflow %> = "tensorflow" ]; then
+  show_tb=""
+fi
+
+echo ${show_tb}
+
 # find available port to run server on
 app_port=$(find_port ${host})
 echo ${app_port} > ${PWD}/tensorboard.port
