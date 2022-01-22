@@ -44,11 +44,14 @@ if [ <%= context.workflow %> = "tensorflow" ]; then
   show_tb=""
 fi
 
-echo ${show_tb}
+echo ${show_tb} > ${HOME}/.ood_tensorboard.${host}.${port}
 
 # find available port to run server on
 app_port=$(find_port ${host})
-echo ${app_port} > ${PWD}/tensorboard.port
+
+#echo ${app_port} >>  ${PWD}/tensorboard.port
+
+echo ${app_port} >> ${HOME}/.ood_tensorboard.${host}.${port}
 
 # find available port to run the AuthRevProxy on
 tb_port=$(find_port ${host})
