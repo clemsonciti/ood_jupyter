@@ -41,7 +41,7 @@ EOL
 
 show_tb="hidden"
 if [ <%= context.workflow %> = "tensorflow" ]; then
-  show_tb=""
+  show_tb="not_hidden"
 fi
 
 echo ${show_tb} > ${HOME}/.ood_tensorboard.${host}.${port}
