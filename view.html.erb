@@ -5,9 +5,9 @@
 -%>
 
 
-<div style="display:inline-block; width:45%;text-align:center;">
+<div style="display:left; width:45%;text-align:center;">
 
-<form id="<%= form_tb %>" action="/rnode/<%= host %>/<%= app_port %>/" method="post" target="_blank" <%= show_tb %>>
+<form id="<%= form_tb %>" action="/rnode/<%= host %>/<%= app_port %>/" method="post" target="_blank" hidden >
   <button class="btn btn-primary" type="submit">
     <i class="fa fa-eye"></i> Connect to Tensorboard
   </button>
