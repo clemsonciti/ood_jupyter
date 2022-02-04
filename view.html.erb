@@ -6,7 +6,9 @@
   #list_env = ENV.values
   #list_env = ENV.keys
   #file_location = ENV["HOME"]
-  tb_info = File.read(ENV["HOME"] + "/.ood_tensorboard" + "." + host.to_s + "." + port.to_s).split
+  #tb_info = File.read(ENV["HOME"] + "/.ood_tensorboard" + "." + host.to_s + "." + port.to_s).split
+  #spark_info = File.read(ENV["HOME"] + "/.ood_spark" + "." + host.to_s + "." + port.to_s).split
+
 -%>
 
 
@@ -20,7 +22,8 @@
 </form>
 </div>
 <div style="display:inline-block; width:45%;text-align:right;">
-<form id="<%= form_tb %>" action="/rnode/<%= host %>/<%= tb_info[1] %>/" method="post" target="_blank" <%= tb_info[0] %>>
+<form id="<%= form_tb %>" action="/rnode/<%= host %>/<%= tb_port %>/auth" method="post" target="_blank" <%= show_tb %>>
+  <input type="hidden" name="password" value="<%= password %>">
   <button class="btn btn-primary" type="submit">
     <i class="fa fa-eye"></i> Connect to Tensorboard
   </button>

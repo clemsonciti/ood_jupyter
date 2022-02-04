@@ -10,27 +10,97 @@ cd "${HOME}"
 # Start Jupyter Notebook Server
 #
 
-<%- unless context.modules.blank? -%>
-# Purge the module environment to avoid conflicts
 module purge
-
-# Load the require modules
 module load <%= context.modules %> <%= context.pbs_modules %>
 
-set -x
-# List loaded modules
-module list
-<%- end -%>
+<%-
+  # Configure NGINX
+  nginx_conf  = session.staged_root.join("nginx.conf")
+  nginx_cache = session.staged_root.join("nginx")
+  nginx_cmd   = <<-EOS.gsub(/^ {4}/, "")
+    singularity run -B "#{nginx_conf}:/usr/local/openresty/nginx/conf/nginx.conf" -B "#{nginx_cache}" /software/external/open-resty/alpine_resty.sif
+  EOS
+-%>
 
+
+set -x
+module list
 # Load the environment (if specified)
 <%= context.pbs_venv %>
+
+
+#
+# Create NGINX configuration file
+#
+echo "Creating NGINX config..."
+(
+umask 077
+mkdir -p "<%= nginx_cache %>"
+mkdir -p <%= nginx_cache %>/logs/
+touch <%= nginx_cache %>/logs/error.log
+
+sed 's/^ \{2\}//' > "<%= nginx_conf %>" << EOT
+  pid <%= nginx_cache %>/nginx.pid;
+  worker_processes 1;
+  error_log <%= nginx_cache %>/logs/error.log warn;
+  events {
+    worker_connections 1024;
+  }
+  http {
+    client_body_temp_path <%= nginx_cache %>/client_body_temp;
+    proxy_temp_path       <%= nginx_cache %>/proxy_temp;
+    fastcgi_temp_path     <%= nginx_cache %>/fastcgi_temp;
+    uwsgi_temp_path       <%= nginx_cache %>/uwsgi_temp;
+    scgi_temp_path        <%= nginx_cache %>/scgi_temp;
+    map \$http_upgrade \$connection_upgrade {
+      default upgrade;
+      ''      close;
+    }
+    server {
+      listen ${tb_port};
+      location /auth {
+        content_by_lua_block {
+          ngx.req.read_body()
+          local args, err = ngx.req.get_post_args()
+          if args and args.password == "${password}" then
+            local session = require "resty.session".start()
+            session.data.authenticated = true
+            session:save()
+          end
+          return ngx.redirect("/")
+        }
+      }
+      location / {
+        access_by_lua_block {
+          local session = require "resty.session".open()
+          if session.data.authenticated ~= true then
+            ngx.exit(ngx.HTTP_FORBIDDEN)
+          end
+        }
+        proxy_pass http://127.0.0.1:6006/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
+        proxy_read_timeout 7d;
+      }
+    }
+  }
+EOT
+)
+
 
 # Benchmark info
 echo "TIMING - Starting jupyter at: $(date)"
 
 # Launch the Jupyter Notebook Server
 set -x
-#jupyter notebook --config="${CONFIG_FILE}"
+
+singularity --version
+<%= nginx_cmd %>
 
 
 jupyter lab --config="${CONFIG_FILE}" --no-browser
+
+
+
+

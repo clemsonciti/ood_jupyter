@@ -7,8 +7,8 @@
 port=$(find_port)
 
 # Generate SHA1 encrypted password (requires OpenSSL installed)
-SALT="$(create_passwd 16)"
-password="$(create_passwd 16)"
+SALT="$(create_passwd 32)"
+export password="$(create_passwd 32)"
 PASSWORD_SHA1="$(echo -n "${password}${SALT}" | openssl dgst -sha1 | awk '{print $NF}')"
 
 # The `$CONFIG_FILE` environment variable is exported as it is used in the main
@@ -35,35 +35,15 @@ c.NotebookApp.nbserver_extensions = {"jupyterlab": True}
 EOL
 )
 
-
-
 ### This is to setup Tensorboard WebProxyServer
 
-show_tb="hidden"
+export show_tb="hidden"
 if [ <%= context.workflow %> = "tensorflow" ]; then
-  show_tb="not_hidden"
+  export show_tb=""
 fi
 
-echo ${show_tb} > ${HOME}/.ood_tensorboard.${host}.${port}
+#echo ${show_tb} > ${HOME}/.ood_tensorboard.${host}.${port}
+#echo ${show_spark} > ${HOME}/.ood_spark.${host}.${port}
 
-# find available port to run server on
-app_port=$(find_port ${host})
-
-#echo ${app_port} >>  ${PWD}/tensorboard.port
-
-echo ${app_port} >> ${HOME}/.ood_tensorboard.${host}.${port}
-
-# find available port to run the AuthRevProxy on
-tb_port=$(find_port ${host})
-export proxy_port=${tb_port}
-
-# generate password
-#tb_password="$(create_passwd 32)"
-
-# export token for cookie verification by authrevproxy
-# replace dashes by underscores in session.id
-#export _ood_token_<%= session.id.gsub("-","_") %>=${tb_password}
-
-# start authrevproxy, to authentify web requests to the application
-#module load anaconda3/2019.10-gcc/8.3.1
-#bin/authrevproxy.py --app-port=${app_port} --proxy-port=${proxy_port} &
+# find available port to run Tensorboard server on
+export tb_port=$(find_port ${host})
