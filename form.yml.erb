@@ -1,6 +1,6 @@
 <%-
   # get _list_partitions
-  p_cmd = "/opt/pbs/default/bin/qstat -Q | grep Rou | grep -v -E 'gpu|c1|c2|osg' | awk '{print $1}' | sort"
+  p_cmd = "/opt/pbs/default/bin/qstat -Q | grep Rou | grep -v -E 'a100|p100|v100|k240|c1|c2|osg' | awk '{print $1}' | sort"
   begin
     output, status = Open3.capture2e(p_cmd)
     if status.success?
