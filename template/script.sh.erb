@@ -47,6 +47,7 @@ sed 's/^ \{2\}//' > "<%= nginx_conf %>" << EOT
     worker_connections 1024;
   }
   http {
+    client_max_body_size 0;
     client_body_temp_path <%= nginx_cache %>/client_body_temp;
     proxy_temp_path       <%= nginx_cache %>/proxy_temp;
     fastcgi_temp_path     <%= nginx_cache %>/fastcgi_temp;
