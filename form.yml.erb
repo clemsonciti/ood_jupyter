@@ -104,13 +104,13 @@ attributes:
   pbs_queue:
     label: "Queue"
     required: true
-    value: "work1"
     help: |
       <small>Queue to submit the job to</small>
     widget: select
+    value: "work1"
     options:
       <%- CustomQueues.queues.each do |g| %>
-      - "<%= g %>"
+      - ["<%= g %>","<%= g %>"]
       <%- end %>
 
   modules: 
