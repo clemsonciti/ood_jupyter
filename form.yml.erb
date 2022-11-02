@@ -149,7 +149,14 @@ attributes:
     options:
       - ["Standard Jupyter Notebook","standard"]
       - ["Tensorflow Notebook","tensorflow"]
-      
+
+  working_dir:
+    label: "Absolute path to working directory"
+    data-filepicker: true
+    data-target-file-type: dirs  # Valid values are: files, dirs, or both
+    readonly: false
+    help: "Select your project directory; defaults to $HOME"
+
 form:
   - modules
   - pbs_modules
@@ -164,4 +171,5 @@ form:
   - pbs_extras
   - pbs_walltime
   - pbs_queue
+  - working_dir
   - bc_email_on_started
