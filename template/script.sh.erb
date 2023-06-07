@@ -115,6 +115,7 @@ set -x
 singularity --version
 <%= nginx_cmd %>
 
+which jupyter
 
 jupyter lab --config="${CONFIG_FILE}" --no-browser "<%= working_dir.to_s %>"
 
